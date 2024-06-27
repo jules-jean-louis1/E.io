@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import socketIO from "socket.io-client";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [socket] = useState(() => socketIO("http://localhost:3000"));
+  const [messages, setMessages] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
+  const [receivedMessages, setReceivedMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log(`⚡: ${socket.id} user just connected!`);
+      setIsConnected(true);
+    });
+
+    socket.on("message", (data) => {
+      console.log("📩: Received message:", data);
+      setReceivedMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      socket.off("connect");
+      socket.off("message");
+      socket.off("disconnect");
+    };
+  }, [socket]);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (messages.length > 0) {
+      socket.emit("message", messages);
+      setMessages("");
+    }
+  };
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+        <h1>Socket.IO Chat App</h1>
+        <div>
+          <ul>
+            {receivedMessages.map((message, index) => (
+              <li key={index}>{message}</li>
+            ))}
+          </ul>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Enter message"
+            onChange={(e) => setMessages(e.target.value)}
+          />
+          <button type="submit">Send</button>
+        </form>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          <strong>Status:</strong> {isConnected ? "Connected" : "Disconnected"}
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

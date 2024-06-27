@@ -20,3 +20,5 @@ services:
       POSTGRES_USER: chatUser
       POSTGRES_PASSWORD: chatPassword
       POSTGRES_DB: chatDatabase
+    ports:
+      - "5432:5432"

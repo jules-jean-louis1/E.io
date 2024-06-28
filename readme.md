@@ -36,9 +36,11 @@ docker compose stop
 Server
 ```bash
 http://localhost:3000
+npm run dev
 ```
 
 Client
 ```bash
 http://localhost:8080
+npm run dev
 ```

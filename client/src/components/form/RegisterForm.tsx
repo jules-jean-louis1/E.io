@@ -1,17 +1,34 @@
 import { FC } from "react";
+import { useForm } from "react-hook-form";
 
 export const RegisterForm: FC = () => {
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const username = e.target.username.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    console.log({ username, email, password });
+  const { handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    const dataUsers = useForm().getValues();
+    if (
+      data.username.length === 0 ||
+      data.email.length === 0 ||
+      data.password.length === 0
+    ) {
+      return;
+    }
+    (async () => {
+      const data = await fetch("https://localhost:3000/api/user/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataUsers),
+      });
+      const resp = await data.json();
+      console.log(resp);
+    })();
   };
-  
+
+  console.log(useForm().getValues());
   return (
     <>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="username">Username</label>
         <input type="text" id="username" name="username" />
         <label htmlFor="email">Email</label>

@@ -39,8 +39,20 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
+
+/****
+ * API routes
+ */
+
 app.get('/api', (req: Request, res: Response) => {
   res.json({ message: "Hello world" });
+});
+
+app.post('/api/user/create', async (req: Request, res: Response) => {
+  const { username, email, password } = req.body;
+  console.log('📩: Received data:', req.body);
+  // const user = await createUser({ username, email, password });
+  // res.json(user);
 });
 
 app.get("/", (req: Request, res: Response) => {

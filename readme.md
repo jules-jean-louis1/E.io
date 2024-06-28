@@ -1,46 +1,56 @@
 # E.io
 
-Convertir les fichier `.ts` en `.js`
+Pour convertir les fichiers `.ts` en `.js`, utilisez la commande suivante :
 
 ```bash
 tsc src/index.ts --outDir dist
 ```
 
-## Init
+## Initialisation
 
-Installer les dépendances
+Pour installer les dépendances, utilisez les commandes suivantes :
+
 ```bash
 cd server && npm i
 cd client && npm i
 ```
-Crée et démarrer les container
+
+Pour créer et démarrer les conteneurs, utilisez la commande suivante :
+
 ```bash
 docker compose up --build
 ```
-Supprimer les images
+
+Pour supprimer les images, utilisez la commande suivante :
+
 ```bash
 docker compose down
 ```
 
-### Start
+### Démarrage
+
+Pour démarrer les conteneurs, utilisez la commande suivante :
 
 ```bash
 docker compose start
 ```
 
-### Stop
+### Arrêt
+
+Pour stopper les conteneurs, utilisez la commande suivante :
 
 ```bash
 docker compose stop
 ```
-Server
+
+L'adresse URL du serveur est `http://localhost:3000`. Pour lancer le serveur en mode développement, utilisez la commande suivante :
+
 ```bash
-http://localhost:3000
 npm run dev
 ```
 
-Client
+L'adresse URL du client est `http://localhost:8080`. Pour lancer le client en mode développement, utilisez la commande suivante :
+
 ```bash
-http://localhost:8080
 npm run dev
 ```

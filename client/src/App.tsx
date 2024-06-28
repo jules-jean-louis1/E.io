@@ -1,5 +1,6 @@
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { Home } from "./page/Home";
+import { AuthPage } from "./page/AuthPage";
 
 const Layout = () => {
   return (
@@ -13,21 +14,15 @@ const Layout = () => {
   );
 };
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ],
-  },
-]);
-
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<AuthPage />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

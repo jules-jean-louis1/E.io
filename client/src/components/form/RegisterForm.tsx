@@ -1,18 +1,12 @@
-import { FC } from "react";
+
 import { useForm } from "react-hook-form";
 
-export const RegisterForm: FC = () => {
-  const { handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
-    const dataUsers = useForm().getValues();
-    if (
-      data.username.length === 0 ||
-      data.email.length === 0 ||
-      data.password.length === 0
-    ) {
-      return;
-    }
-    (async () => {
+export const RegisterForm = () => {
+  const { handleSubmit, getValues } = useForm();
+
+  const onSubmit = async () => {
+    const dataUsers = getValues();
+    try {
       const data = await fetch("https://localhost:3000/api/user/create", {
         method: "POST",
         headers: {
@@ -22,10 +16,13 @@ export const RegisterForm: FC = () => {
       });
       const resp = await data.json();
       console.log(resp);
-    })();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log(useForm().getValues());
+  console.log("RegisterForm", getValues());
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>

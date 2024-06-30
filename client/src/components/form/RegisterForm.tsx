@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 
 export const RegisterForm = () => {
@@ -7,7 +6,7 @@ export const RegisterForm = () => {
   const onSubmit = async () => {
     const dataUsers = getValues();
     try {
-      const data = await fetch("https://localhost:3000/api/user/create", {
+      const data = await fetch("http://localhost:3000/api/user/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,7 +6,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
-      
+    environment:
+      CHAT_SERVER_URL: "http://chat-server:3000"
+
   chat-server:
     build:
       context: ./server

@@ -15,6 +15,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    volumes:
+      - ./server:/app/server
     ports:
       - "3000:3000"
 

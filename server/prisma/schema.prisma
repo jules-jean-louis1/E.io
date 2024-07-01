@@ -6,11 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://chatUser:chatPassword@localhost:5432/chatDatabase"
+  url      = "postgresql://chatUser:chatPassword@chat-db:5432/chatDatabase?schema=public"
 }
 
 model User {

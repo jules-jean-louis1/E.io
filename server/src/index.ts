@@ -3,6 +3,7 @@ import cors from "cors";
 import http from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { createUser } from "./crud/crud_user";
+import { findAllUsers } from "./repository/userRepository";
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -47,9 +48,25 @@ app.get("/api", (req: Request, res: Response) => {
 });
 
 app.post("/api/user/create", async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
-  createUser(req.body);
-  res.json({ message: "User created successfully" });
+  try {
+    const result = await createUser(req.body);
+    if ("error" in result) {
+      res.status(400).json({ error: result.error });
+    } else {
+      res
+        .status(201)
+        .json({ message: "User created successfully", user: result });
+    }
+  } catch (error) {
+    console.error("Error in /api/user/create route", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/api/users/", async (req: Request, res: Response) => {
+  const result = findAllUsers();
+  res.json(result);
+  // res.send("Express + TypeScript Server with Socket.IO");
 });
 
 app.get("/", (req: Request, res: Response) => {
@@ -59,5 +76,3 @@ app.get("/", (req: Request, res: Response) => {
 server.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
-
-console.log("🚀: Server started");

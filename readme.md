@@ -54,3 +54,17 @@ L'adresse URL du client est `http://localhost:8080`. Pour lancer le client en mo
 ```bash
 npm run dev
 ```
+
+### Conteneurs
+
+Pour lister les conteneurs, utilisez la commande suivante :
+
+```bash
+docker ps
+```
+
+Pour accéder à un conteneur, utilisez la commande suivante :
+
+```bash
+docker exec -it <container_id> /bin/bash
+```

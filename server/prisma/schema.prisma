@@ -18,7 +18,8 @@ model User {
   email     String
   password  String
   username  String
-  socketId  String?
+  created_at DateTime   @default(now())
+  updated_at DateTime?
   Chatrooms Chatroom[]  @relation("UserChatrooms")
   OwnedChatrooms Chatroom[] @relation("Owner") // Add this line
   UserRoom  UserRoom[]
@@ -29,6 +30,7 @@ model Chatroom {
   id              Int         @id @default(autoincrement())
   name            String
   roomBroadcastId Int
+  created_at      DateTime    @default(now())
   ownerId         Int?
   owner           User?       @relation("Owner", fields: [ownerId], references: [id])
   Users           User[]      @relation("UserChatrooms") // Add this line

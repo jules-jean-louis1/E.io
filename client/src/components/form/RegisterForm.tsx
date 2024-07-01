@@ -1,10 +1,15 @@
 import { useForm } from "react-hook-form";
 
-export const RegisterForm = () => {
-  const { handleSubmit, getValues } = useForm();
+type Inputs = {
+  username: string;
+  email: string;
+  password: string;
+};
 
-  const onSubmit = async () => {
-    const dataUsers = getValues();
+export const RegisterForm = () => {
+  const { handleSubmit, register } = useForm<Inputs>();
+
+  const onSubmit = async (dataUsers: Inputs) => {
     try {
       const data = await fetch("http://localhost:3000/api/user/create", {
         method: "POST",
@@ -20,17 +25,15 @@ export const RegisterForm = () => {
     }
   };
 
-  console.log("RegisterForm", getValues());
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="username">Username</label>
-        <input type="text" id="username" name="username" />
+        <input type="text" id="username" {...register("username")} />
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" />
+        <input type="email" id="email" {...register("email")} />
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" />
+        <input type="password" id="password" {...register("password")} />
         <button type="submit">Register</button>
       </form>
     </>

@@ -3,7 +3,14 @@ import cors from "cors";
 import http from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { createUser } from "./crud/crud_user";
-import { findAllUsers } from "./repository/userRepository";
+
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+const findAllUsers = async () => {
+  return await prisma.user.findMany();
+};
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -25,7 +32,7 @@ io.on("connection", (socket: Socket) => {
     console.log("📩: Received message:", data);
     io.emit("message", data);
   });
-  // io.emit('userConnected', { message: `New user connected: ${socket.id}` });
+  io.emit('userConnected', { message: `New user connected: ${socket.id}` });
 
   // socket.on('customEvent', (data: any) => {
   //   console.log('Received custom event:', data);

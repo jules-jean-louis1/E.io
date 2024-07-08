@@ -10,8 +10,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgresql://chatUser:chatPassword@chat-db:5432/chatDatabase?schema=public"
+  provider = "postgresql"  
+  url = env("DATABASE_URL")
 }
 
 model User {

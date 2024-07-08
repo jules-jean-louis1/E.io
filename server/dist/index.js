@@ -17,7 +17,11 @@ const cors_1 = __importDefault(require("cors"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const crud_user_1 = require("./crud/crud_user");
-const userRepository_1 = require("./repository/userRepository");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+const findAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.user.findMany();
+});
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 const server = http_1.default.createServer(app);
@@ -69,7 +73,7 @@ app.post("/api/user/create", (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 }));
 app.get("/api/users/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = (0, userRepository_1.findAllUsers)();
+    const result = findAllUsers();
     res.json(result);
     // res.send("Express + TypeScript Server with Socket.IO");
 }));
@@ -79,4 +83,3 @@ app.get("/", (req, res) => {
 server.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
-console.log("🚀: GG");

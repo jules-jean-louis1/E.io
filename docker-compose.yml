@@ -20,7 +20,7 @@ services:
     ports:
       - "3000:3000"
 
-  chat-db:
+  chatDatabase:
     image: postgres
     environment:
       POSTGRES_USER: chatUser

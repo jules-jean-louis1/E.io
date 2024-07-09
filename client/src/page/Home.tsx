@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import socketIO from "socket.io-client";
+import { GeneralChat } from "../components/chat/GeneralChat";
 
 export const Home = () => {
   const [socket] = useState(() => socketIO("http://localhost:3000"));
@@ -64,10 +65,18 @@ export const Home = () => {
     socket.emit("msg", { roomName: roomName, message: roomMessages });
   };
 
-
   return (
     <>
-      <section className="flex items-start w-screen justify-between h-screen space-x-4">
+      <section
+        className={`w-screen h-6 flex justify-center ${
+          isConnected ? "bg-green-500" : "bg-red-500"
+        }`}
+      >
+        <p>
+          <strong>Status:</strong> {isConnected ? "Connected" : "Disconnected"}
+        </p>
+      </section>
+      <section className="flex items-start w-screen justify-between h-[calc(100%-24px)] space-x-4">
         <div className="bg-green-100 px-3 w-[10.5rem] h-full">
           {rooms.length > 0 ? (
             <ul>
@@ -141,28 +150,13 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        <div>
-          <h1>Socket.IO Chat App</h1>
-          <div>
-            <ul>
-              {receivedMessages.map((message, index) => (
-                <li key={index}>{message}</li>
-              ))}
-            </ul>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Enter message"
-              onChange={(e) => setMessages(e.target.value)}
-            />
-            <button type="submit">Send</button>
-          </form>
-          <p>
-            <strong>Status:</strong>{" "}
-            {isConnected ? "Connected" : "Disconnected"}
-          </p>
-        </div>
+        <article>
+          <GeneralChat
+            setMessages={setMessages}
+            receivedMessages={receivedMessages}
+            onSubmit={handleSubmit}
+          />
+        </article>
       </section>
     </>
   );

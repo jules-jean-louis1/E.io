@@ -1,9 +1,13 @@
-import { useState, useEffect } from "react";
-import socketIO from "socket.io-client";
+import { useState, useEffect, useContext } from "react";
 import { GeneralChat } from "../components/chat/GeneralChat";
+import { SocketContext } from "../context/Socket";
+import { Plus } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { RoomChat } from "../components/chat/RoomChat";
 
 export const Home = () => {
-  const [socket] = useState(() => socketIO("http://localhost:3000"));
+  const socket = useContext(SocketContext);
   const [messages, setMessages] = useState("");
   const [roomMessages, setRoomMessages] = useState("");
   const [rooms, setRooms] = useState<string[]>([]);
@@ -61,7 +65,6 @@ export const Home = () => {
 
   const handlePostMessage = () => {
     if (!roomMessages || !roomName) return;
-    console.log("sending message");
     socket.emit("msg", { roomName: roomName, message: roomMessages });
   };
 
@@ -76,33 +79,33 @@ export const Home = () => {
           <strong>Status:</strong> {isConnected ? "Connected" : "Disconnected"}
         </p>
       </section>
-      <section className="flex items-start w-screen justify-between h-[calc(100%-24px)] space-x-4">
-        <div className="bg-green-100 px-3 w-[10.5rem] h-full">
+      <section className="grid grid-cols-12 gap-3 w-screen h-[calc(100vh-24px)]">
+        <div className="p-3 col-span-3 h-full bg-white border-r border-[#a8b3cf]">
           {rooms.length > 0 ? (
-            <ul>
+            <ul className="w-full py-4">
               {rooms.map((room, index) => (
                 <li key={index} className="flex space-x-1">
-                  <button
+                  <Button
                     onClick={() => {
                       socket.emit("joinRoom", `${room}`);
                       setRoomName(room);
                     }}
                   >
                     {room}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => {
                       socket.emit("leaveRoom", `${room}`);
                     }}
-                    className="text-red-500 border border-red-500 rounded-md px-2 py-1"
+                    variant="destructive"
                   >
-                    Leave
-                  </button>
+                    Quitter
+                  </Button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>No active rooms</p>
+            <p>Aucune Room Active</p>
           )}
           <form
             action=""
@@ -110,54 +113,30 @@ export const Home = () => {
             onSubmit={(e) => handleJoinRoom(e)}
             className="flex flex-col"
           >
-            <input
-              type="text"
+            <Input
               placeholder="Enter room name"
               onChange={(e) => setRoomName(e.target.value)}
-              className="mb-2 w-fit"
             />
-            <button type="submit">Create Room</button>
+            <Button type="submit" className="flex">
+              <Plus />
+              Crée un room
+            </Button>
           </form>
         </div>
-        <div className="w-1/2 bg-green-200">
-          <h2>Room</h2>
-          <div className="flex flex-col w-full">
-            <div className="flex flex-col w-full min-h-72">
-              <ul>
-                {activeRoomMsg.map((msg, index) => (
-                  <li key={index}>
-                    <p>{msg.message}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <form
-                action=""
-                method="post"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handlePostMessage();
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Enter message"
-                  onChange={(e) => setRoomMessages(e.target.value)}
-                />
-                <button type="submit">Send</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <article>
-          <GeneralChat
-            setMessages={setMessages}
-            receivedMessages={receivedMessages}
-            onSubmit={handleSubmit}
-          />
-        </article>
+        <RoomChat
+          setRoomMessages={setRoomMessages}
+          roomName={roomName}
+          activeRoomMsg={activeRoomMsg}
+          onSubmit={handlePostMessage}
+        />
       </section>
+      <div>
+        <GeneralChat
+          setMessages={setMessages}
+          receivedMessages={receivedMessages}
+          onSubmit={handleSubmit}
+        />
+      </div>
     </>
   );
 };

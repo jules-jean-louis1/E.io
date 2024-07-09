@@ -1,6 +1,7 @@
 import { Routes, Route, Outlet } from "react-router-dom";
 import { Home } from "./page/Home";
 import { AuthPage } from "./page/AuthPage";
+import { SocketContext, socket } from "./context/Socket";
 
 const Layout = () => {
   return (
@@ -16,12 +17,14 @@ const Layout = () => {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="login" element={<AuthPage />} />
-      </Route>
-    </Routes>
+    <SocketContext.Provider value={socket}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<AuthPage />} />
+        </Route>
+      </Routes>
+    </SocketContext.Provider>
   );
 }
 

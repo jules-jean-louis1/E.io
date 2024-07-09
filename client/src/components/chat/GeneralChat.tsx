@@ -1,4 +1,6 @@
 import { FC } from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface GeneralChatProps {
   setMessages: (value: string) => void;
@@ -21,13 +23,8 @@ export const GeneralChat: FC<GeneralChatProps> = (props) => {
             </ul>
           </div>
           <form onSubmit={onSubmit} className="h-6 flex w-fit">
-            <input
-              type="text"
-              placeholder="Enter message"
-              onChange={(e) => setMessages(e.target.value)}
-              className="w-4/6"
-            />
-            <button type="submit">Send</button>
+            <Input placeholder="Enter message" onChange={(e) => setMessages(e.target.value)} />
+            <Button type="submit">Send</Button>
           </form>
         </div>
       </div>
